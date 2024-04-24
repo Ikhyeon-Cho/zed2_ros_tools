@@ -1,0 +1,28 @@
+<launch>
+  <arg name="camera_ns" default="zed2" />
+  <arg name="project_dir" default="" />
+  <arg name="bagfile_name" default="zed2_camera.bag" />
+
+  <arg name="enable_pointcloud" default="true" />
+
+  <arg name="playback_speed" default="1" />
+  <arg name="start_time" default="0.0" />
+
+  <!-- Raw Image publisher -->
+  <include file="$(find zed2_ros_tools)/launch/include/compressed2raw.launch.xml">
+    <arg name="camera_ns" value="$(arg camera_ns)" />
+  </include>
+
+  <!-- Publish pointcloud -->
+  <include if="$(arg enable_pointcloud)"
+    file="$(find zed2_ros_tools)/launch/include/depth2cloud_rgb.launch.xml">
+    <arg name="camera_ns" value="$(arg camera_ns)" />
+  </include>
+
+
+  <!-- Play rosbag file -->
+  <param name="/use_sim_time" value="true" />
+  <node name="$(arg camera_ns)_player" pkg="rosbag" type="play" output="screen"
+    args="--clock -r $(arg playback_speed) -s $(arg start_time) $(env HOME)/Downloads/$(arg project_dir)/$(arg bagfile_name)" />
+
+</launch>

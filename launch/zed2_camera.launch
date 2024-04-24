@@ -1,0 +1,33 @@
+<launch>
+  <arg name="camera_ns" default="zed2" />
+
+  <!-- For preventing frame drop: High level PNG compression is too slow -->
+  <!-- Change png_level from 9 to 1 -->
+  <param name="/$(arg camera_ns)_camera/depth/depth_registered/compressedDepth/png_level" value="1" />
+
+  <!-- Zed2 Mounted pose: Static Transform to zed2_base_link -->
+  <arg name="base_frame" default="base_link" />
+  <arg name="cam_pos_x" default="0.0" /> <!-- Position respect to base frame (i.e. "base_link) -->
+  <arg name="cam_pos_y" default="0.0" /> <!-- Position respect to base frame (i.e. "base_link) -->
+  <arg name="cam_pos_z" default="0.0" /> <!-- Position respect to base frame (i.e. "base_link) -->
+  <arg name="cam_roll" default="0.0" /> <!-- Orientation respect to base frame (i.e. "base_link) -->
+  <arg name="cam_pitch" default="0.0" /> <!-- Orientation respect to base frame (i.e. "base_link) -->
+  <arg name="cam_yaw" default="0.0" /> <!-- Orientation respect to base frame (i.e. "base_link) -->
+
+  <include file="$(find zed2_ros_tools)/launch/include/zed_camera.launch.xml">
+    <arg name="camera_name" value="$(arg camera_ns)" /> <!-- camera_name: zed2 -->
+    <arg name="node_name" value="$(arg camera_ns)_camera" /> <!-- node_name: zed2_node -->
+
+    <arg name="camera_model" value="zed2" /> <!-- Zed2 URDF model -->
+    <arg name="base_frame" value="$(arg base_frame)" />
+    <arg name="publish_urdf" value="true" /> <!-- publish_urdf: true -->
+    <arg name="cam_pos_x" value="$(arg cam_pos_x)" />
+    <arg name="cam_pos_y" value="$(arg cam_pos_y)" />
+    <arg name="cam_pos_z" value="$(arg cam_pos_z)" />
+    <arg name="cam_roll" value="$(arg cam_roll)" />
+    <arg name="cam_pitch" value="$(arg cam_pitch)" />
+    <arg name="cam_yaw" value="$(arg cam_yaw)" />
+  </include>
+  <param name="/$(arg camera_ns)_camera/point_cloud_freq" value="1" />
+
+</launch>

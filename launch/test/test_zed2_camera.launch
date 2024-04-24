@@ -1,0 +1,11 @@
+<launch>
+  <arg name="namespace" default="/" />
+
+  <include file="$(find zed2_ros_tools)/launch/zed2_camera.launch">
+    <arg name="namespace" value="$(arg namespace)" />
+  </include>
+
+  <!-- RViz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find zed2_ros_tools)/launch/rviz/zed2.rviz" output="screen" />
+
+</launch>
