@@ -28,6 +28,5 @@
     <arg name="cam_pitch" value="$(arg cam_pitch)" />
     <arg name="cam_yaw" value="$(arg cam_yaw)" />
   </include>
-  <param name="/$(arg camera_ns)_camera/point_cloud_freq" value="1" />
 
 </launch>
