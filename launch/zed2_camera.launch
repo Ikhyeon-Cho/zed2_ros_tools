@@ -1,9 +1,8 @@
 <launch>
-  <arg name="camera_ns" default="zed2" />
+  <arg name="camera_ns" default="zed2_camera" />
 
-  <!-- For preventing frame drop: High level PNG compression is too slow -->
-  <!-- Change png_level from 9 to 1 -->
-  <param name="/$(arg camera_ns)_camera/depth/depth_registered/compressedDepth/png_level" value="1" />
+  <!-- Pointcloud params -->
+  <arg name="enable_pointcloud" default="true" />
 
   <!-- Zed2 Mounted pose: Static Transform to zed2_base_link -->
   <arg name="base_frame" default="base_link" />
@@ -14,19 +13,39 @@
   <arg name="cam_pitch" default="0.0" /> <!-- Orientation respect to base frame (i.e. "base_link) -->
   <arg name="cam_yaw" default="0.0" /> <!-- Orientation respect to base frame (i.e. "base_link) -->
 
-  <include file="$(find zed2_ros_tools)/launch/include/zed_camera.launch.xml">
-    <arg name="camera_name" value="$(arg camera_ns)" /> <!-- camera_name: zed2 -->
-    <arg name="node_name" value="$(arg camera_ns)_camera" /> <!-- node_name: zed2_node -->
+  <!-- Remap topics -->
+  <remap from="/$(arg camera_ns)/zed2_camera/rgb/camera_info" to="/$(arg camera_ns)/color/camera_info" />
+  <remap from="/$(arg camera_ns)/zed2_camera/rgb/image_rect_color" to="/$(arg camera_ns)/color/image" />
+  <remap from="/$(arg camera_ns)/zed2_camera/depth/camera_info" to="/$(arg camera_ns)/depth_aligned/camera_info" />
+  <remap from="/$(arg camera_ns)/zed2_camera/depth/depth_registered" to="/$(arg camera_ns)/depth_aligned/image" />
+  <remap from="/$(arg camera_ns)/zed2_camera/imu/data" to="/$(arg camera_ns)/imu/data" />
+  <remap from="/$(arg camera_ns)/zed2_camera/imu/data_raw" to="/$(arg camera_ns)/imu/data_raw" />
+  <remap from="/$(arg camera_ns)/zed2_camera/imu/mag" to="/$(arg camera_ns)/imu/mag" />
 
-    <arg name="camera_model" value="zed2" /> <!-- Zed2 URDF model -->
-    <arg name="base_frame" value="$(arg base_frame)" />
-    <arg name="publish_urdf" value="true" /> <!-- publish_urdf: true -->
-    <arg name="cam_pos_x" value="$(arg cam_pos_x)" />
-    <arg name="cam_pos_y" value="$(arg cam_pos_y)" />
-    <arg name="cam_pos_z" value="$(arg cam_pos_z)" />
-    <arg name="cam_roll" value="$(arg cam_roll)" />
-    <arg name="cam_pitch" value="$(arg cam_pitch)" />
-    <arg name="cam_yaw" value="$(arg cam_yaw)" />
+  <!-- For preventing frame drop: High level PNG compression is too slow -->
+  <!-- Change png_level from 9 to 1 -->
+  <param name="/$(arg camera_ns)/depth_aligned/image/compressedDepth/png_level" value="1" />
+
+  <group ns="$(arg camera_ns)">
+    <include file="$(find zed2_ros_tools)/launch/include/zed_camera.launch.xml">
+      <arg name="camera_name" value="zed2" /> <!-- camera_name: zed2 -->
+      <arg name="node_name" value="zed2_camera" /> <!-- node_name: zed2_node -->
+
+      <arg name="camera_model" value="zed2" /> <!-- Zed2 URDF model -->
+      <arg name="base_frame" value="$(arg base_frame)" />
+      <arg name="publish_urdf" value="true" /> <!-- publish_urdf: true -->
+      <arg name="cam_pos_x" value="$(arg cam_pos_x)" />
+      <arg name="cam_pos_y" value="$(arg cam_pos_y)" />
+      <arg name="cam_pos_z" value="$(arg cam_pos_z)" />
+      <arg name="cam_roll" value="$(arg cam_roll)" />
+      <arg name="cam_pitch" value="$(arg cam_pitch)" />
+      <arg name="cam_yaw" value="$(arg cam_yaw)" />
+    </include>
+  </group>
+
+  <!-- Depth image proc package -->
+  <!-- Publish pointcloud by using depth_image_proc -->
+  <include if="$(arg enable_pointcloud)" file="$(find zed2_ros_tools)/launch/include/depth2cloud_rgb.launch.xml">
+    <arg name="camera_ns" value="$(arg camera_ns)" />
   </include>
-
 </launch>

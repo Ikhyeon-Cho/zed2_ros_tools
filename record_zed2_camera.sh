@@ -5,7 +5,7 @@ mkdir -p ~/Downloads/$2
 
 rosbag record -O ~/Downloads/$2/$3 \
   /tf_static \
-  /$1/rgb/camera_info \
-  /$1/depth/camera_info \
-  /$1/rgb/image_rect_color/compressed \
-  /$1/depth/depth_registered/compressedDepth \
+  /$1/color/camera_info \
+  /$1/color/image/compressed \
+  /$1/depth_aligned/camera_info \
+  /$1/depth_aligned/image/compressedDepth

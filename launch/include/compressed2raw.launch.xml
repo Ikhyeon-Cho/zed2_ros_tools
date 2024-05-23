@@ -1,13 +1,14 @@
 <launch>
-  <arg name="camera_ns" default="zed2" />
-  <arg name="img_color" default="/$(arg camera_ns)_camera/rgb/image_rect_color" />
-  <arg name="img_depth" default="/$(arg camera_ns)_camera/depth/depth_registered" />
+  <arg name="camera_ns" default="/" />
+  <arg name="img_color" default="/$(arg camera_ns)/color/image" />
+  <arg name="img_depth" default="/$(arg camera_ns)/depth_aligned/image" />
 
   <!-- Raw Image republiser -->
-  <node name="$(arg camera_ns)_img_republisher_color" pkg="image_transport" type="republish"
-    args="compressed in:=$(arg img_color) raw out:=$(arg img_color)" />
+  <group ns="$(arg camera_ns)">
+    <node name="img_republisher_color" pkg="image_transport" type="republish"
+      args="compressed in:=$(arg img_color) raw out:=$(arg img_color)" />
 
-  <node name="$(arg camera_ns)_img_republisher_depth" pkg="image_transport" type="republish"
-    args="compressedDepth in:=$(arg img_depth) raw out:=$(arg img_depth)" />
-
+    <node name="img_republisher_depth" pkg="image_transport" type="republish"
+      args="compressedDepth in:=$(arg img_depth) raw out:=$(arg img_depth)" />
+  </group>
 </launch>

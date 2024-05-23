@@ -1,6 +1,6 @@
 <launch>
-  <arg name="camera_ns" default="zed2" />
-  <arg name="project_dir" default="" />
+  <arg name="camera_ns" default="zed2_camera" />
+  <arg name="project_dir" default="zed2_camera/test" />
   <arg name="bagfile_name" default="zed2_camera.bag" />
 
   <arg name="enable_pointcloud" default="true" />

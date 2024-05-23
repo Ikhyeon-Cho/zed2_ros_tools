@@ -1,18 +1,18 @@
 <launch>
-  <arg name="camera_ns" default="zed2" />
-  <arg name="project_dir" default="" />
+  <arg name="camera_ns" default="zed2_camera" />
+  <arg name="project_dir" default="zed2_camera/test" />
   <arg name="bag_file" default="zed2_camera.bag" />
 
   <arg name="enable_imu" default="false" />   <!-- Data recording option -->
 
   <group if="$(arg enable_imu)">
-    <node name="zed2_recorder" pkg="zed2_ros_tools" type="record_zed2_camera_imu.sh" output="screen"
-      args="$(arg camera_ns)_camera $(arg project_dir) $(arg bag_file) " />
+    <node name="zed2_recorder_imu" pkg="zed2_ros_tools" type="record_zed2_camera_imu.sh" output="screen"
+      args="$(arg camera_ns) $(arg project_dir) $(arg bag_file) " />
   </group>
 
   <group unless="$(arg enable_imu)">
     <node name="zed2_recorder" pkg="zed2_ros_tools" type="record_zed2_camera.sh" output="screen"
-      args="$(arg camera_ns)_camera $(arg project_dir) $(arg bag_file) " />
+      args="$(arg camera_ns) $(arg project_dir) $(arg bag_file) " />
   </group>
   
 </launch>
