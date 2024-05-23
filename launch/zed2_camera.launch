@@ -3,6 +3,7 @@
 
   <!-- Pointcloud params -->
   <arg name="enable_pointcloud" default="true" />
+  <arg name="config_path" default="$(find zed2_ros_tools)/config/zed2.yaml" />
 
   <!-- Zed2 Mounted pose: Static Transform to zed2_base_link -->
   <arg name="base_frame" default="base_link" />
@@ -30,6 +31,9 @@
     <include file="$(find zed2_ros_tools)/launch/include/zed_camera.launch.xml">
       <arg name="camera_name" value="zed2" /> <!-- camera_name: zed2 -->
       <arg name="node_name" value="zed2_camera" /> <!-- node_name: zed2_node -->
+      
+      <!-- Config yaml path -->
+      <arg name="config_path" value="$(arg config_path)" />
 
       <arg name="camera_model" value="zed2" /> <!-- Zed2 URDF model -->
       <arg name="base_frame" value="$(arg base_frame)" />

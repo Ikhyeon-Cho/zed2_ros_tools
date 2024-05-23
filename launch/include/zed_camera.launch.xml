@@ -21,6 +21,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <arg name="camera_name"           default="zed2" /> <!-- The name you want -->
     <arg name="camera_model"          default="zed2" /> <!-- 'zed' or 'zedm' or 'zed2' -->
     <arg name="node_name"             default="zed2_camera" />
+    <arg name="config_path"           default="$(find zed2_ros_tools)/config/zed2.yaml" />
 
     <!-- Load SVO file -->
     <arg name="svo_file"              default="" /><!-- <arg name="svo_file" default="path/to/svo/file.svo"> -->
@@ -68,7 +69,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     <node name="$(arg node_name)" pkg="zed_wrapper" type="zed_wrapper_node" output="screen" required="true"><!-- launch-prefix="valgrind" -->
         <rosparam file="$(find zed2_ros_tools)/config/common.yaml" command="load" />
-        <rosparam file="$(find zed2_ros_tools)/config/zed2.yaml" command="load" />
+        <rosparam file="$(arg config_path)" command="load" />
 
         <!-- Camera name -->
         <param name="general/camera_name"               value="$(arg camera_name)" />
